@@ -482,6 +482,8 @@ ProgressWriter -Status "Installing Direct Play" -PercentComplete $PercentComplet
 Install-WindowsFeature Direct-Play | Out-Null
 ProgressWriter -Status "Installing .net 3.5" -PercentComplete $PercentComplete
 Install-WindowsFeature Net-Framework-Core | Out-Null
+ProgressWriter -Status "Installing Wireless Networking" -PercentComplete $PercentComplete
+Install-WindowsFeature Wireless-Networking | Out-Null
 ProgressWriter -Status "Cleaning up" -PercentComplete $PercentComplete
 Remove-Item -Path C:\ParsecTemp\DirectX -force -Recurse 
 }
