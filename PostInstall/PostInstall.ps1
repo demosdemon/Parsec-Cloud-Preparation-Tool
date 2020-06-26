@@ -792,6 +792,14 @@ Start-Sleep -s 1
 Write-Output "app_host=1" | Out-File -FilePath $ENV:AppData\Parsec\config.txt -Encoding ascii
 }
 
+# Script to get the partition sizes and then resize the volume
+function expand-boot-disk {
+$drive_letter = "C"
+$size = (Get-PartitionSupportedSize -DriveLetter $drive_letter)
+ProgressWriter -Status "Expanding $drive_letter to $($size.SizeMax)" -PercentComplete $PercentComplete
+Resize-Partition -DriveLetter $drive_letter -Size $size.SizeMax
+}
+
 #Disable Devices
 function disable-devices {
 ProgressWriter -Status "Disabling Microsoft Basic Display Adapter, Generic Non PNP Monitor and other devices" -PercentComplete $PercentComplete
@@ -813,6 +821,7 @@ function clean-up-recent {
 ProgressWriter -Status "Delete recently accessed files list from Windows Explorer" -PercentComplete $PercentComplete
 remove-item "$env:APPDATA\Microsoft\Windows\Recent\*" -Recurse -Force | Out-Null
 }
+
 
 #Start GPU Update Tool
 Function StartGPUUpdate {
@@ -879,6 +888,7 @@ Write-Host -foregroundcolor red "
 "   
 PromptUserAutoLogon -DontPromptPasswordUpdateGPU:$DontPromptPasswordUpdateGPU
 $ScripttaskList = @(
+"expand-boot-disk";
 "setupEnvironment";
 "addRegItems";
 "create-directories";
